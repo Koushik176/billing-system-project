@@ -1,23 +1,33 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from "react";
+import "./App.css";
+import OrderForm from "./Components/OrderForm/OrderForm";
+import OrdersList from "./Components/Orders/OrdersList/OrdersList";
 
 function App() {
+  const [ordersArray, setOrdersArray] = useState([]);
+
+  const addOrderHandler = (order) => {
+    setOrdersArray((prevOrdersArray) => {
+      return [order, ...prevOrdersArray];
+    });
+  };
+
+  const deleteOrderHandler = (orderId) => {
+    setOrdersArray((prevOrdersArray) => {
+      const updatedOrders = prevOrdersArray.filter(
+        (order) => order.orderId !== orderId
+      );
+      return updatedOrders;
+    });
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <OrderForm onAddOrder={addOrderHandler} />
+      <OrdersList
+        allOrdersArray={ordersArray}
+        onDeleteOrder={deleteOrderHandler}
+      />
     </div>
   );
 }
